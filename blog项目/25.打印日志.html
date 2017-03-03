@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><p>现在给博客增加日志，实现访问日志（access.log）和错误日志（error.log）功能</p>
+<h1><a href="#把日志保存为日志文件" name="把日志保存为日志文件" id="把日志保存为日志文件" class="anchor"></a>把日志保存为日志文件</h1>
+<p>app.js</p>
+<pre><code>正常日志
+var accessLog = fs.createWriteStream('access.log', {flags: 'a'});
+app.use(logger('dev',{stream: accessLog}));
+
+错误日志
+var errorLog = fs.createWriteStream('error.log', {flags: 'a'});
+app.use(function (err, req, res, next) {
+  var meta = '[' + new Date() + '] ' + req.url + '\n';
+  errorLog.write(meta + err.stack + '\n');
+  next();
+});
+</code></pre></div>
+  </body>
+</html>

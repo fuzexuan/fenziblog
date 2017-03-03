@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#路由规划" name="路由规划" id="路由规划" class="anchor"></a>路由规划</h1>
+    <p>我们已经把设计的构想图贴出来了，接下来的任务就是完成路由规划了。路由规划，或者说控制器规划是整个网站的骨架部分，因为它处于整个架构的枢纽位置，相当于各个接口之间的粘合剂，所以应该优先考虑。</p>
+    <ul>
+      <li>/ ：首页</li>
+      <li>/users/login ：用户登录</li>
+      <li>/users/reg ：用户注册</li>
+      <li>/articles/post ：发表文章</li>
+      <li>/articles/logout ：登出</li>
+    </ul>
+    <h1><a href="#增加路由" name="增加路由" id="增加路由" class="anchor"></a>增加路由</h1>
+    <p>routes/users.js 中添加下列代码</p>
+    <pre><code>/**
+     * 用户注册
+     */
+    router.get('/reg', function (req, res) {
+        res.render('user/reg', {title: '注册'});
+    });
+
+    /**
+     * 当填写用户注册信息提交时的处理
+     */
+    router.post('/reg', function (req, res) {
+    });
+
+    /**
+     * 显示用户登录表单
+     */
+    router.get('/login', function (req, res) {
+        res.render('user/login', {title: '登录'});
+    });
+
+    /**
+     * 当填写用户登录信息提交时的处理
+     */
+    router.post('/login', function (req, res) {
+    });
+
+    router.get('/logout', function (req, res) {
+    });
+    </code></pre>
+    <p>routes/articles.js 中添加下列代码</p>
+    <pre><code>router.get('/add', function (req, res) {
+        res.render('article/add', { title: '发表文章' });
+    });
+
+    router.post('/add', function (req, res) {
+
+    });
+    </code></pre>
+    <h1><a href="#修改app-js" name="修改app-js" id="修改app-js" class="anchor"></a>修改app.js</h1>
+    <p>app.js中添加以下代码</p>
+    <pre><code>var articles = require('./routes/article');
+    app.use('/articles', articles);
+    </code></pre>
+    <h1><a href="#增加模板" name="增加模板" id="增加模板" class="anchor"></a>增加模板</h1>
+    <p>views下增加以下文件</p>
+    <h2><a href="#views-article-add-ejs" name="views-article-add-ejs" id="views-article-add-ejs" class="anchor"></a>views/article/add.ejs</h2>
+    <pre><code>&lt;%= title %&gt;
+    </code></pre>
+    <h2><a href="#views-user-login-ejs" name="views-user-login-ejs" id="views-user-login-ejs" class="anchor"></a>views/user/login.ejs</h2>
+    <pre><code>&lt;%= title %&gt;
+    </code></pre>
+    <h2><a href="#views-user-reg-ejs" name="views-user-reg-ejs" id="views-user-reg-ejs" class="anchor"></a>views/user/reg.ejs</h2>
+    <pre><code>&lt;%= title %&gt;
+    </code></pre>
+    <h1><a href="#效果" name="效果" id="效果" class="anchor"></a>效果</h1>
+    <h2><a href="#用户注册" name="用户注册" id="用户注册" class="anchor"></a>用户注册</h2>
+    <p>http://localhost:3000/users/reg</p>
+    <p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/reg.jpg" class="img-responsive"></p>
+    <h2><a href="#用户登陆" name="用户登陆" id="用户登陆" class="anchor"></a>用户登陆</h2>
+    <p>http://localhost:3000/users/login</p>
+    <p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/login.jpg" class="img-responsive"></p>
+    <h2><a href="#发表文章" name="发表文章" id="发表文章" class="anchor"></a>发表文章</h2>
+    <p>http://localhost:3000/articles/add</p>
+    <p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/articleadd.jpg" class="img-responsive"></p></div>    
+  </body>
+</html>

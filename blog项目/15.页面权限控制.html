@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#页面权限控制" name="页面权限控制" id="页面权限控制" class="anchor"></a>页面权限控制</h1>
+<p>我们虽然已经完成了用户注册与登陆的功能，但并不能阻止比如已经登陆的用户访问 http://localhost:3000/users/reg 页面， 为此，我们需要为页面设置访问权限。即注册和登陆页面应该阻止已登陆的用户访问， 登出及后面我们将要实现的发表页只对已登录的用户开放。 如何实现页面权限的控制呢？我们可以把用户登录状态的检查放到路由中间件中，在每个路径前增加路由中间件，即可实现页面权限控制。 我们添加 checkNotLogin 和 checkLogin 函数来实现这个功能。</p>
+<h1><a href="#添加中间件" name="添加中间件" id="添加中间件" class="anchor"></a>添加中间件</h1>
+<p>添加middleware文件夹 在<code>middleware</code>下添加<code>index.js</code>文件 middleware/index.js</p>
+<pre><code> exports.checkLogin = function(req, res, next) {
+     if (!req.session.user) {
+         req.flash('error', '未登录!');
+         return res.redirect('/users/login');
+     }
+     next();
+ }
+
+ exports.checkNotLogin = function(req, res, next) {
+     if (req.session.user) {
+         req.flash('error', '已登录!');
+         return res.redirect('back');//返回之前的页面
+     }
+     next();
+ }
+</code></pre>
+<h1><a href="#在路由中添加中间件" name="在路由中添加中间件" id="在路由中添加中间件" class="anchor"></a>在路由中添加中间件</h1>
+<p>修改 routes/users.js</p>
+<pre><code>router.get('/reg',middleware.checkNotLogin, function (req, res) {
+    res.render('user/reg', {title: '注册'});
+});
+</code></pre>
+<p>修改routes/article.js</p>
+<pre><code>router.get('/add',middleware.checkLogin, function (req, res) {
+    res.render('article/add', { title: '发表文章' });
+});
+</code></pre>
+<p>凡是不能登陆的中间加入 <code>checkNotLogin</code> 凡是需要登陆的中间加入 <code>checkLogin</code></p></div>
+  </body>
+</html>

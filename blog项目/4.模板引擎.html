@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#什么是模板引擎" name="什么是模板引擎" id="什么是模板引擎" class="anchor"></a>什么是模板引擎</h1>
+    <p>模板引擎（Template Engine）是一个将页面模板和要显示的数据结合起来生成 HTML 页面的工具。 如果说上面讲到的 express 中的路由控制方法相当于 MVC 中的控制器的话，那模板引擎就相当于 MVC 中的视图。</p>
+    <h1><a href="#ejs" name="ejs" id="ejs" class="anchor"></a>ejs</h1>
+    <p>ejs使用起来十分简单，而且与 express 集成良好。</p>
+    <h2><a href="#使用模板引擎" name="使用模板引擎" id="使用模板引擎" class="anchor"></a>使用模板引擎</h2>
+    <p>前面我们通过以下两行代码设置了模板文件的存储位置和使用的模板引擎：</p>
+    <pre><code>app.set('views', path.join(__dirname, 'views'));
+    app.set('view engine', 'ejs');
+    </code></pre>
+    <p>注意：我们通过 express -e zhufengpeixunblog 只是初始化了一个使用 ejs 模板引擎的工程而已，比如 node_modules 下添加了 ejs 模块，views 文件夹下有 index.ejs 。并不是说强制该工程只能使用 ejs 不能使用其他的模板引擎比如 jade，真正指定使用哪个模板引擎的是 app.set('view engine', 'ejs'); 。</p>
+    <p>在 routes/index.js 中通过调用 res.render() 渲染模版，并将其产生的页面直接返回给客户端。它接受两个参数，第一个是模板的名称，即 views 目录下的模板文件名，扩展名 .ejs 可选。第二个参数是传递给模板的数据对象，用于模板翻译。</p>
+    <p>打开 views/index.ejs ，内容如下：</p>
+    <p><strong>index.ejs</strong></p>
+    <pre><code>var express = require('express');
+    var router = express.Router();
+
+    /* GET home page. */
+    router.get('/', function(req, res, next) {
+      res.render('index', { title: 'Express' });
+    });
+
+    module.exports = router;
+    </code></pre>
+    <p>当我们 res.render('index', { title: 'Express' }); 时，模板引擎会把 &lt;%= title %&gt; 替换成 Express，然后把替换后的页面显示给用户。</p>
+    <p>渲染后生成的页面代码为：</p>
+    <pre><code>&lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+      &lt;head&gt;
+        &lt;title&gt;Express&lt;/title&gt;
+        &lt;link rel='stylesheet' href='/stylesheets/style.css' /&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;h1&gt;Express&lt;/h1&gt;
+        &lt;p&gt;Welcome to Express&lt;/p&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+    </code></pre>
+    <p>注意：我们通过 app.use(express.static(path.join(__dirname, 'public'))) 设置了静态文件目录为 public 文件夹， 所以上面代码中的 href='/stylesheets/style.css' 就相当于 href='public/stylesheets/style.css' 。</p>
+    <p>ejs 的标签系统非常简单，它只有以下三种标签：</p>
+    <p>&lt;% code %&gt;：JavaScript 代码。 &lt;%= code %&gt;：显示替换过 HTML 特殊字符的内容。 &lt;%- code %&gt;：显示原始 HTML 内容。 注意： &lt;%= code %&gt; 和 &lt;%- code %&gt; 的区别，当变量 code 为普通字符串时，两者没有区别。当 code 比如为 </p><h1>hello</h1> 这种字符串时，&lt;%= code %&gt; 会原样输出 <h1>hello</h1>，而 &lt;%- code %&gt; 则会显示 H1 大的 hello 字符串。<p></p>
+    <h1><a href="#页面布局" name="页面布局" id="页面布局" class="anchor"></a>页面布局</h1>
+    <p>这里我们不使用layout进行页面布局，而是使用更为简单灵活的include。include 的简单使用如下：</p>
+    <p><strong>index.ejs</strong></p>
+    <pre><code>&lt;%- include a %&gt;
+    hello,world!
+    &lt;%- include b %&gt;
+    </code></pre>
+    <p><strong>a.ejs</strong></p>
+    <pre><code>this is a.ejs
+    </code></pre>
+    <p><strong>b.ejs</strong></p>
+    <pre><code>this is b.ejs
+    </code></pre>
+    <p>最终 index.ejs 会显示：</p>
+    <pre><code>this is a.ejs
+    hello,world!
+    this is b.ejs
+    </code></pre></div>    
+  </body>
+</html>

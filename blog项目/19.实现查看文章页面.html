@@ -1,0 +1,32 @@
+<div class="lesson-content-text-body"><h1><a href="#修改首页" name="修改首页" id="修改首页" class="anchor"></a>修改首页</h1>
+<p>views/index.ejs</p>
+<pre><code> &lt;h4 class="media-heading"&gt;&lt;a href="/articles/detail/&lt;%=article._id%&gt;"&gt;&lt;%=article.title%&gt;&lt;/a&gt;&lt;/h4&gt;
+</code></pre>
+<h1><a href="#修改路由" name="修改路由" id="修改路由" class="anchor"></a>修改路由</h1>
+<p>routes/article.js</p>
+<pre><code> router.get('/detail/:_id', function (req, res) {
+     Model('Article').findOne({_id:req.params._id},function(err,article){
+         article.content = markdown.toHTML(article.content);
+         res.render('article/detail',{title:'查看文章',article:article});
+     });
+ });
+</code></pre>
+<h1><a href="#增加详情页" name="增加详情页" id="增加详情页" class="anchor"></a>增加详情页</h1>
+<p>views/article/detail.ejs</p>
+<pre><code> &lt;% include ../include/header.ejs%&gt;
+ &lt;div class="container"&gt;
+     &lt;div class="panel panel-default"&gt;
+         &lt;div class="panel-heading"&gt;
+             &lt;%=article.title%&gt;
+         &lt;/div&gt;
+         &lt;div class="panel-body"&gt;
+             &lt;%-article.content%&gt;
+         &lt;/div&gt;
+         &lt;div class="panel-footer"&gt;
+             &lt;a href="/articles/edit/&lt;%=article._id%&gt;" class="btn btn-warning"&gt;编辑&lt;/a&gt;
+             &lt;a href="/articles/delete/&lt;%=article._id%&gt;" class="btn btn-danger"&gt;删除&lt;/a&gt;
+         &lt;/div&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+ &lt;% include ../include/footer.ejs%&gt;
+</code></pre></div>

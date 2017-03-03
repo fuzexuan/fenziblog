@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#在views下创建include文件夹" name="在views下创建include文件夹" id="在views下创建include文件夹" class="anchor"></a>在views下创建include文件夹</h1>
+    <h1><a href="#在include下添加包含的头部" name="在include下添加包含的头部" id="在include下添加包含的头部" class="anchor"></a>在include下添加包含的头部</h1>
+    <p>header.ejs</p>
+    <pre><code>&lt;!DOCTYPE html&gt;
+    &lt;html lang="zh-CN"&gt;
+    &lt;head&gt;
+        &lt;meta charset="utf-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+        &lt;title&gt;珠峰博客&lt;/title&gt;
+        &lt;link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet"&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;!--最外面的容器nav标签，并添加nav-bar样式类，表示这里面属于导航条 --&gt;
+    &lt;nav class="navbar navbar-default" role="navigation"&gt;
+        &lt;!--第二步：增加header--&gt;
+        &lt;div class="navbar-header"&gt;
+            &lt;!--最左侧的，默认不可见 按钮标签里嵌套了三个span的icon。然后给与navbar-toggle样式类和属性collapse(收起)，点击的时候目标为data-target。当窗口缩小到一定程度，右侧的效果显现。--&gt;
+            &lt;button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menus"&gt;
+                &lt;span class="sr-only"&gt;珠峰博客&lt;/span&gt;
+                &lt;span class="icon-bar"&gt;&lt;/span&gt;
+                &lt;span class="icon-bar"&gt;&lt;/span&gt;
+                &lt;span class="icon-bar"&gt;&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;a href="/" class="navbar-brand"&gt;珠峰博客&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;!-- 放置其它的导航条 --&gt;
+        &lt;div class="collapse navbar-collapse" id="menus"&gt;
+            &lt;ul class="nav navbar-nav"&gt;
+                &lt;li class="active"&gt;&lt;a href="/users/reg"&gt;注册&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/users/login"&gt;登录&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/articles/add"&gt;发表文章&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/users/logout"&gt;登出&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+    </code></pre>
+    <h1><a href="#在include下添加包含的尾部" name="在include下添加包含的尾部" id="在include下添加包含的尾部" class="anchor"></a>在include下添加包含的尾部</h1>
+    <p>footer.ejs</p>
+    <pre><code>&lt;script src="/lib/jquery/dist/jquery.js"&gt;&lt;/script&gt;
+    &lt;script src="/lib/bootstrap/dist/js/bootstrap.js"&gt;&lt;/script&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+    </code></pre>
+    <h1><a href="#修改首页" name="修改首页" id="修改首页" class="anchor"></a>修改首页</h1>
+    <p>views/index.ejs</p>
+    <pre><code>&lt;% include include/header.ejs%&gt;
+    &lt;div class="container"&gt;
+     主页
+    &lt;/div&gt;
+    &lt;% include include/footer.ejs%&gt;
+    </code></pre>
+    <p>效果如下</p>
+    <pre><code>&lt;img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/homepage.jpg" class="img-responsive"&gt;
+    </code></pre>
+    <h1><a href="#修改用户注册页面" name="修改用户注册页面" id="修改用户注册页面" class="anchor"></a>修改用户注册页面</h1>
+    <p>views/user/reg.ejs</p>
+    <pre><code>&lt;% include ../include/header.ejs%&gt;
+    &lt;div class="container"&gt;
+        &lt;form action="/users/reg" method="post"  role="form" class="form-horizontal"&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="username" class="col-sm-2 control-label"&gt;用户名&lt;/label&gt;
+                &lt;div class="input-group col-sm-10"&gt;
+                    &lt;div class="input-group-addon"&gt; &lt;span class="glyphicon glyphicon-user"&gt;&lt;/span&gt; &lt;/div&gt;
+                    &lt;input type="text" class="form-control" id="username" name="username" placeholder="用户名"/&gt;
+                &lt;/div&gt;
+
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="email" class="col-sm-2 control-label"&gt;邮箱&lt;/label&gt;
+                &lt;div class="input-group col-sm-10"&gt;
+                    &lt;div class="input-group-addon"&gt;&lt;span class="glyphicon glyphicon-envelope"&gt;&lt;/span&gt;&lt;/div&gt;
+                    &lt;input type="email" class="form-control" name="email" id="email" placeholder="邮箱"/&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="password" class="col-sm-2 control-label"&gt;确认密码&lt;/label&gt;
+                &lt;div class="input-group col-sm-10"&gt;
+                    &lt;div class="input-group-addon"&gt;&lt;span class="glyphicon glyphicon-lock"&gt;&lt;/span&gt;&lt;/div&gt;
+                    &lt;input type="password" class="form-control" name="password" id="password" placeholder="密码"/&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="repassword" class="col-sm-2 control-label"&gt;确认密码&lt;/label&gt;
+                &lt;div class="input-group col-sm-10"&gt;
+                    &lt;div class="input-group-addon"&gt;&lt;span class="glyphicon glyphicon-lock"&gt;&lt;/span&gt;&lt;/div&gt;
+                    &lt;input type="password" class="form-control" name="repassword" id="repassword" placeholder="确认密码"/&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;div class="col-sm-offset-2 col-sm-10"&gt;
+                    &lt;button type="submit" class="btn btn-default"&gt;提交&lt;/button&gt;
+                    &lt;button type="reset" class="btn btn-default"&gt;重置&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+        &lt;/form&gt;
+    &lt;/div&gt;
+    &lt;% include ../include/footer.ejs%&gt;
+    </code></pre>
+    <p>效果如下</p>
+    <p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/bootreg.jpg" class="img-responsive"></p>
+    <h1><a href="#修改用户登录界面" name="修改用户登录界面" id="修改用户登录界面" class="anchor"></a>修改用户登录界面</h1>
+    <p>views/user/login.ejs</p>
+    <pre><code>&lt;% include ../include/header.ejs%&gt;
+    &lt;div class="container"&gt;
+        &lt;form action="/users/login" method="post"  role="form" class="form-horizontal"&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="username" class="col-sm-2 control-label"&gt;用户名&lt;/label&gt;
+                &lt;div class="input-group col-sm-10"&gt;
+                    &lt;div class="input-group-addon"&gt; &lt;span class="glyphicon glyphicon-user"&gt;&lt;/span&gt; &lt;/div&gt;
+                    &lt;input type="text" class="form-control" id="username" name="username" placeholder="用户名"/&gt;
+                &lt;/div&gt;
+
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="password" class="col-sm-2 control-label"&gt;确认密码&lt;/label&gt;
+                &lt;div class="input-group col-sm-10"&gt;
+                    &lt;div class="input-group-addon"&gt;&lt;span class="glyphicon glyphicon-lock"&gt;&lt;/span&gt;&lt;/div&gt;
+                    &lt;input type="password" class="form-control" name="password" id="password" placeholder="密码"/&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="form-group"&gt;
+                &lt;div class="col-sm-offset-2 col-sm-10"&gt;
+                    &lt;button type="submit" class="btn btn-default"&gt;提交&lt;/button&gt;
+                    &lt;button type="reset" class="btn btn-default"&gt;重置&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+        &lt;/form&gt;
+    &lt;/div&gt;
+    &lt;% include ../include/footer.ejs%&gt;
+    </code></pre>
+    <p>效果如下</p>
+    <p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/bootlogin.jpg" class="img-responsive"></p>
+    <h1><a href="#修改发表文章页面" name="修改发表文章页面" id="修改发表文章页面" class="anchor"></a>修改发表文章页面</h1>
+    <p>views/article/add.ejs</p>
+    <pre><code>   &lt;% include ../include/header.ejs%&gt;
+       &lt;div class="container"&gt;
+           &lt;form action="/articles/add" method="post"  role="form" class="form-horizontal"&gt;
+               &lt;div class="form-group"&gt;
+                   &lt;label for="title" class="col-sm-2 control-label"&gt;标题&lt;/label&gt;
+                   &lt;div class="col-sm-10"&gt;
+                       &lt;input type="text" value="" class="form-control" id="title" name="title" placeholder="标题"/&gt;
+                   &lt;/div&gt;
+               &lt;/div&gt;
+               &lt;div class="form-group"&gt;
+                   &lt;label for="content" class="col-sm-2 control-label"&gt;正文&lt;/label&gt;
+                   &lt;div class="col-sm-10"&gt;
+                       &lt;textarea class="form-control"   id="" cols="30" rows="10" id="content" name="content" placeholder="请输入内容"&gt;&lt;/textarea&gt;
+                   &lt;/div&gt;
+               &lt;/div&gt;
+               &lt;div class="form-group"&gt;
+                   &lt;div class="col-sm-offset-2 col-sm-10"&gt;
+                       &lt;button type="submit" class="btn btn-default"&gt;提交&lt;/button&gt;
+                       &lt;button type="reset" class="btn btn-default"&gt;重置&lt;/button&gt;
+                   &lt;/div&gt;
+               &lt;/div&gt;
+           &lt;/form&gt;
+       &lt;/div&gt;
+       &lt;% include ../include/footer.ejs%&gt;
+    </code></pre>
+    <p>效果如下</p>
+    <p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/bootaddblog.jpg" class="img-responsive"></p></div>    
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content lesson-content-text ps-container" id="lesson-text-content" data-role="lesson-content" style="display: block;">
+          <div class="lesson-content-text-body"><p>我们需要引入 flash 模块来实现页面通知（即成功与错误信息的显示）的功能。</p>
+<h1><a href="#什么是-flash-" name="什么是-flash-" id="什么是-flash-" class="anchor"></a>什么是 flash?</h1>
+<p>我们所说的 flash 即 connect-flash 模块（https://github.com/jaredhanson/connect-flash），flash 是一个在 session 中用于存储信息的特定区域。信息写入 flash ，下一次显示完毕后即被清除。典型的应用是结合重定向的功能，确保信息是提供给下一个被渲染的页面。</p>
+<h1><a href="#安装模块" name="安装模块" id="安装模块" class="anchor"></a>安装模块</h1>
+<pre><code>npm install connect-flash --save
+</code></pre>
+<h1><a href="#在app-js中添加调用此模块" name="在app-js中添加调用此模块" id="在app-js中添加调用此模块" class="anchor"></a>在app.js中添加调用此模块</h1>
+<pre><code>var flash = require('connect-flash');
+app.use(flash());
+</code></pre>
+<h1><a href="#在发表文章的路由里放置flash提示信息" name="在发表文章的路由里放置flash提示信息" id="在发表文章的路由里放置flash提示信息" class="anchor"></a>在发表文章的路由里放置flash提示信息</h1>
+<pre><code>router.post('/add', function (req, res) {
+    req.body.user = req.session.user._id;
+    new Model('Article')(req.body).save(function(err,article){
+        if(err){
+            req.flash('error', '更新文章失败!'); 放置失败信息
+            return res.redirect('/articles/add');
+        }
+        req.flash('success', '更新文章成功!');  放置成功信息
+        res.redirect('/');//发表文章成功后返回主页
+    });
+});
+</code></pre>
+<h1><a href="#在页面里增加显示提示的区域" name="在页面里增加显示提示的区域" id="在页面里增加显示提示的区域" class="anchor"></a>在页面里增加显示提示的区域</h1>
+<p>修改 views/include/header.ejs 在最底部增加以下区域 </p>
+<pre><code>&lt;div class="container text-center"&gt;
+    &lt;% if (success) { %&gt;
+    &lt;div class="alert alert-success" role="alert"&gt;&lt;%= success %&gt;&lt;/div&gt;
+    &lt;% } %&gt;
+    &lt;% if (error) { %&gt;
+    &lt;div class="alert alert-danger" role="alert"&gt;&lt;%= error %&gt;&lt;/div&gt;
+    &lt;% } %&gt;
+&lt;/div&gt;
+</code></pre>
+<h1><a href="#用session中的值为模板赋默认值" name="用session中的值为模板赋默认值" id="用session中的值为模板赋默认值" class="anchor"></a>用session中的值为模板赋默认值</h1>
+<p>在app.js 中增加以下中间件</p>
+<pre><code>app.use(function(req,res,next){
+  res.locals.user = req.session.user;
+  res.locals.success = req.flash('success').toString();
+  res.locals.error = req.flash('error').toString();
+  next();
+});
+</code></pre>
+<h1><a href="#请自行修改其它提示" name="请自行修改其它提示" id="请自行修改其它提示" class="anchor"></a>请自行修改其它提示</h1></div>
+        <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px; width: 980px; display: none;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; right: 3px; height: 325px; display: inherit;"><div class="ps-scrollbar-y" style="top: 0px; height: 89px;"></div></div></div>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<div class="lesson-content-text-body"><h1><a href="#安装文件上传模块" name="安装文件上传模块" id="安装文件上传模块" class="anchor"></a>安装文件上传模块</h1>
+<pre><code>npm install multer --save
+</code></pre>
+<h1><a href="#修改模板" name="修改模板" id="修改模板" class="anchor"></a>修改模板</h1>
+<p>views/article/add.ejs</p>
+<pre><code>form的类型改为
+enctype="multipart/form-data"
+
+增加一个字段
+&lt;div class="form-group"&gt;
+            &lt;label for="img" class="col-sm-2 control-label"&gt;图片&lt;/label&gt;
+            &lt;div class="col-sm-10"&gt;
+                &lt;input type="file" class="form-control"  name="img" id="img"/&gt;
+            &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h1><a href="#修改模型" name="修改模型" id="修改模型" class="anchor"></a>修改模型</h1>
+<p>db/models.js</p>
+<pre><code>   Article: {
+          user:{type:ObjectId,ref:'User'},
+          title: String,
+          content: String,
+          img:String, 增加了图片字段
+          createAt:{type: Date, default: Date.now}
+      }
+</code></pre>
+<h1><a href="#修改路由" name="修改路由" id="修改路由" class="anchor"></a>修改路由</h1>
+<p>routes/article.js</p>
+<pre><code>var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../public/uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now()+'.'+file.mimetype.slice(file.mimetype.indexOf('/')+1))
+    }
+})
+var upload = multer({ storage:storage});
+
+router.post('/add',middleware.checkLogin,upload.single('img'), function (req, res) {
+    req.body.user = req.session.user._id;
+    if(req.file){
+        req.body.img = path.join('/uploads',req.file.filename);
+    }
+});
+</code></pre></div>

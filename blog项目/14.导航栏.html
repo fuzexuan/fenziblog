@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content lesson-content-text ps-container" id="lesson-text-content" data-role="lesson-content" style="">
+          <div class="lesson-content-text-body"><h1><a href="#控制导航" name="控制导航" id="控制导航" class="anchor"></a>控制导航</h1>
+<p>用户是否登陆看到的页面应该是不一样的，所以应该根据用户登陆状态来控制导航菜单的显示状态</p>
+<h1><a href="#修改导航" name="修改导航" id="修改导航" class="anchor"></a>修改导航</h1>
+<p>修改 <code>views/include/header.ejs</code></p>
+<pre><code>&lt;ul class="nav navbar-nav"&gt;
+            &lt;%
+            if(!user){
+            %&gt;
+            &lt;li class="active"&gt;&lt;a href="/users/reg"&gt;注册&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/users/login"&gt;登录&lt;/a&gt;&lt;/li&gt;
+            &lt;%
+            }else{
+            %&gt;
+            &lt;li&gt;&lt;a href="/articles/add"&gt;发表文章&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/users/logout"&gt;登出&lt;/a&gt;&lt;/li&gt;
+            &lt;%
+            }
+            %&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>用户登陆后显示发表文章和登出按钮，用户登陆前显示注册和登录按钮。</p></div>
+  </body>
+</html>

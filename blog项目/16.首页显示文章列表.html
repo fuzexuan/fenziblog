@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#修改首页模板" name="修改首页模板" id="修改首页模板" class="anchor"></a>修改首页模板</h1>
+    <p>views/index.ejs</p>
+    <pre><code>&lt;% include include/header.ejs%&gt;
+    &lt;div class="container"&gt;
+     &lt;ul class="media-list"&gt;
+      &lt;%
+      articles.forEach(function(article){
+      %&gt;
+      &lt;li class="media"&gt;
+       &lt;div class="media-left"&gt;
+        &lt;a href="#"&gt;
+         &lt;img class="media-object" src="&lt;%=article.user.avatar%&gt;" alt=""&gt;
+        &lt;/a&gt;
+       &lt;/div&gt;
+       &lt;div class="media-body"&gt;
+        &lt;h4 class="media-heading"&gt;&lt;a href="/articles/detail/&lt;%=article._id%&gt;"&gt;&lt;%=article.title%&gt;&lt;/a&gt;&lt;/h4&gt;
+        &lt;p class="media-left"&gt;&lt;%- article.content%&gt;&lt;/p&gt;
+       &lt;/div&gt;
+       &lt;div class="media-bottom"&gt;
+        作者:&lt;%=article.user.username%&gt;
+        发表时间:&lt;%=article.createAt.toLocaleString()%&gt;
+       &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;%
+      });
+      %&gt;
+     &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;% include include/footer.ejs%&gt;
+    </code></pre>
+    <h1><a href="#修改路由" name="修改路由" id="修改路由" class="anchor"></a>修改路由</h1>
+    <p>routes/index.js</p>
+    <pre><code>router.get('/', function(req, res, next) {
+      Model('Article').find({}).populate('user').exec(function(err,articles){
+        res.render('index', {title: '主页',articles:articles});
+      });
+    });
+    </code></pre></div>    
+  </body>
+</html>

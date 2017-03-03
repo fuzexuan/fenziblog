@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#安装数据库支持" name="安装数据库支持" id="安装数据库支持" class="anchor"></a>安装数据库支持</h1>
+    <pre><code>npm install mongoose --save
+    </code></pre>
+    <p>安装mongodb模块到node_modules下面并把此配置添加到<code>package.json</code>文件中</p>
+    <h1><a href="#在工程根目录下创建-文件" name="在工程根目录下创建-文件" id="在工程根目录下创建-文件" class="anchor"></a>在工程根目录下创建 <code>settings.js</code> 文件</h1>
+    <pre><code>module.exports = {
+        cookieSecret:'zhufengkey', 用于 Cookie 加密与数据库无关
+        db:'zhufengblog', 数据库的名称
+        host:'123.57.143.189', 数据库的地址
+        port:27017,  数据库的端口号
+        url:"mongodb://123.57.143.189:27017/zhufengblog"
+    }
+    </code></pre>
+    <h1><a href="#编写数据库交互" name="编写数据库交互" id="编写数据库交互" class="anchor"></a>编写数据库交互</h1>
+    <h2><a href="#创建db文件夹" name="创建db文件夹" id="创建db文件夹" class="anchor"></a>创建db文件夹</h2>
+    <h2><a href="#在db文件夹下创建文件" name="在db文件夹下创建文件" id="在db文件夹下创建文件" class="anchor"></a>在db文件夹下创建文件<code>models.js</code></h2>
+    <p>此文件存放着所有的模型</p>
+    <pre><code>var mongoose = require('mongoose');
+    var ObjectId = mongoose.Schema.Types.ObjectId;
+    module.exports = {
+        User:{ 设置User的数据模型
+            username:{type:String,required:true},用户名
+            password:{type:String,required:true},密码
+            email:{type:String,required:true},邮箱
+            avatar:{type:String,required:true}头像
+        },
+        Article: { 设置文章的数据模型
+            user:{type:ObjectId,ref:'User'}, 用户
+            title: String, 标题
+            content: String, 内容
+            createAt:{type: Date, default: Date.now} 创建时间
+        }
+    }
+    </code></pre>
+    <h2><a href="#在db文件夹下创建文件" name="在db文件夹下创建文件" id="在db文件夹下创建文件" class="anchor"></a>在db文件夹下创建文件<code>index.js</code></h2>
+    <p>此文件负责向外暴露模型,因为Model赋给了global作为属性，那就意味着在程序任何地方都可以调用了</p>
+    <pre><code>var mongoose = require('mongoose'),
+        Schema = mongoose.Schema,
+        models = require('./models');
+    var settings = require('../settings');
+    mongoose.connect(settings.url);
+    mongoose.model('User', new Schema(models.User));
+    mongoose.model('Article', new Schema(models.Article));
+    global.Model = function (type) {
+            return mongoose.model(type);;
+        }
+    </code></pre>
+    <h1><a href="#在添加" name="在添加" id="在添加" class="anchor"></a>在<code>app.js中</code>添加</h1>
+    <pre><code>require('./db'); //导入db模块
+    </code></pre></div>    
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#安装async" name="安装async" id="安装async" class="anchor"></a>安装async</h1>
+<pre><code>npm install async --save
+</code></pre>
+<h1><a href="#修改模型" name="修改模型" id="修改模型" class="anchor"></a>修改模型</h1>
+<p>db/models.js</p>
+<pre><code> pv: {type:Number,default:0},
+</code></pre>
+<h1><a href="#修改路由" name="修改路由" id="修改路由" class="anchor"></a>修改路由</h1>
+<p>routes/article.js</p>
+<pre><code> var async = require('async');
+ router.get('/detail/:_id', function (req, res) {
+     async.parallel([function(callback){
+         Model('Article').findOne({_id:req.params._id}).populate('user').populate('comments.user').exec(function(err,article){
+                 article.content = markdown.toHTML(article.content);
+                 callback(err,article);
+         });
+     },function(callback){
+         Model('Article').update({_id:req.params._id},{$inc:{pv:1}},callback);
+     }],function(err,result){
+         if(err){
+             req.flash('error',err);
+             res.redirect('back');
+         }
+         res.render('article/detail',{title:'查看文章',article:result[0]});
+     });
+ });
+</code></pre>
+<h1><a href="#修改模板" name="修改模板" id="修改模板" class="anchor"></a>修改模板</h1>
+<p>views/index.ejs</p>
+<pre><code>    阅读：&lt;%= article.pv %&gt;|
+    评论：&lt;%= article.comments.length%&gt;
+</code></pre></div>
+  </body>
+</html>

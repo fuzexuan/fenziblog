@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#生成文件说明" name="生成文件说明" id="生成文件说明" class="anchor"></a>生成文件说明</h1>
+    <p><strong>app.js</strong>：express的主配置文件<br><strong>package.json</strong>：存储着工程的信息及模块依赖，当在 dependencies 中添加依赖的模块时，运行 <code>npm install</code>，npm 会检查当前目录下的 package.json，并自动安装所有指定的模块<br><strong>node_modules</strong>：存放 package.json 中安装的模块，当你在 package.json 添加依赖的模块并安装后，存放在这个文件夹下<br><strong>public</strong>：存放 image、css、js 等文件<br><strong>routes</strong>：存放路由文件<br><strong>views</strong>：存放视图文件或者说模版文件<br><strong>bin</strong>：可执行文件，可以从此启动服务器</p>
+    <h2><a href="#app-js" name="app-js" id="app-js" class="anchor"></a>app.js</h2>
+    <pre><code>var express = require('express'); 加载node_modules下的express模块
+    var path = require('path');
+    var favicon = require('serve-favicon');
+    var logger = require('morgan');
+    var cookieParser = require('cookie-parser');
+    var bodyParser = require('body-parser');
+
+    var routes = require('./routes/index');
+    var users = require('./routes/users');
+
+    var app = express(); 生成一个express实例 app
+
+    // view engine setup
+    app.set('views', path.join(__dirname, 'views'));设置 views 文件夹为存放视图文件的目录, 即存放模板文件的地方,__dirname 为全局变量,存储当前正在执行的脚本所在的目录。
+    app.set('view engine', 'ejs'); 设置视图模板引擎为 ejs。
+
+    // uncomment after placing your favicon in /public
+    //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico'))); 设置/public/favicon.ico为favicon图标。
+    app.use(logger('dev')); 加载日志中间件。
+    app.use(bodyParser.json()); 加载解析json的中间件。
+    app.use(bodyParser.urlencoded({ extended: false })); 加载解析urlencoded请求体的中间件。
+    app.use(cookieParser()); 加载解析cookie的中间件。
+    app.use(express.static(path.join(__dirname, 'public'))); 设置public文件夹为存放静态文件的目录。
+
+    app.use('/', routes); 根目录的路由
+    app.use('/users', users); 用户路由
+
+    // catch 404 and forward to error handler 捕获404错误，并转发到错误处理器。
+    app.use(function(req, res, next) {
+      var err = new Error('Not Found');
+      err.status = 404;
+      next(err);
+    });
+
+    // error handlers 错误处理器
+
+    // development error handler 开发环境下的错误处理
+    // will print stacktrace 将打印出堆栈信息
+    if (app.get('env') === 'development') {
+      app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+          message: err.message,
+          error: err
+        });
+      });
+    }
+
+    // production error handler 生产环境下的错误处理
+    // no stacktraces leaked to user 不向用户暴露堆栈信息
+    app.use(function(err, req, res, next) {
+      res.status(err.status || 500);
+      res.render('error', {
+        message: err.message,
+        error: {}
+      });
+    });
+
+
+    module.exports = app;  导出app供 bin/www 使用
+    </code></pre>
+    <h2><a href="#bin-www" name="bin-www" id="bin-www" class="anchor"></a>bin/www</h2>
+    <pre><code>#!/usr/bin/env node  表明是 node 可执行文件。
+
+    /**
+     * Module dependencies.
+     */
+
+    var app = require('../app'); 引入我们上面app.js导出的app实例
+    var debug = require('debug')('zkingblog:server');  引入打印调试日志的debug模块，并设置名称。
+    var http = require('http'); 引入http
+
+    /**
+     * Get port from environment and store in Express. 从环境变量中获取端口号并存放到express中
+     */
+
+    var port = normalizePort(process.env.PORT || '3000'); 设置端口号
+    app.set('port', port); 设置端口号
+
+    /**
+     * Create HTTP server. 创建http服务器
+     */
+
+    var server = http.createServer(app);
+
+    /**
+     * Listen on provided port, on all network interfaces. 在所有的网络接口中监听提供的端口
+     */
+
+    server.listen(port);
+    server.on('error', onError); 监听错误事件
+    server.on('listening', onListening); 启动工程并监听3000端口，成功后打印 Express server listening on port 3000。
+
+    /**
+     * Normalize a port into a number, string, or false. 把一个端口处理成一个数字或字符串或者false
+     */
+
+    function normalizePort(val) {
+      var port = parseInt(val, 10); 先试图转成10进制数字
+
+      if (isNaN(port)) {
+        // named pipe 转不成数字就当作命名管道来处理
+        return val;
+      }
+
+      if (port &gt;= 0) {
+        // port number 如果端口大于0就返回端口
+        return port;
+      }
+
+      return false; 不是命名管道，也不是正常端口就返回false
+    }
+
+    /**
+     * Event listener for HTTP server "error" event. 服务器的错误事件监听器
+     */
+
+    function onError(error) {
+      if (error.syscall !== 'listen') { 如果系统调用不是监听则抛出错误
+        throw error;
+      }
+
+      var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+      // handle specific listen errors with friendly messages 更友好的处理特定的监听错误
+      switch (error.code) { 错误编码
+        case 'EACCES': 没有权限
+          console.error(bind + ' requires elevated privileges'); 没有权限绑定指定的端口
+          process.exit(1); 异常退出
+          break;
+        case 'EADDRINUSE': 端口被占用
+          console.error(bind + ' is already in use');端口被占用
+          process.exit(1);异常退出
+          break;
+        default:
+          throw error; 其它的情况抛出错误并中止进程
+      }
+    }
+
+    /**
+     * Event listener for HTTP server "listening" event. 服务器的监听端口成功事件回调
+     */
+
+    function onListening() {
+      var addr = server.address(); 取得服务器的地址
+      var bind = typeof addr === 'string' 监听地址如果是字符串返回命名管道名，如果是数字返回端口
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+      debug('Listening on ' + bind); 记录日志
+    }
+    </code></pre>
+    <h1><a href="#routes-index-js" name="routes-index-js" id="routes-index-js" class="anchor"></a>routes/index.js</h1>
+    <pre><code>var express = require('express'); 导入express模块
+    var router = express.Router(); 生成一个路由实例
+
+    /* GET home page.  取得主页*/
+    router.get('/', function(req, res, next) { 当用户访问根目录也就是 / 的时候执行此回调
+      res.render('index', { title: 'Express' }); 渲染views/index.ejs模版并显示到浏览器中
+    });
+
+    module.exports = router; 导出这个路由并在app.js中通过app.use('/', routes); 加载
+    </code></pre>
+    <h1><a href="#views-index-ejs" name="views-index-ejs" id="views-index-ejs" class="anchor"></a>views/index.ejs</h1>
+    <p>在渲染模板时我们传入了一个变量 title 值为 express 字符串，模板引擎会将所有 &lt;%= title %&gt; 替换为 express ，然后将渲染后生成的html显示到浏览器中</p>
+    <pre><code>&lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+      &lt;head&gt;
+        &lt;title&gt;&lt;%= title %&gt;&lt;/title&gt;
+        &lt;link rel='stylesheet' href='/stylesheets/style.css' /&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;h1&gt;&lt;%= title %&gt;&lt;/h1&gt;
+        &lt;p&gt;Welcome to &lt;%= title %&gt;&lt;/p&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+    </code></pre></div>
+  </body>
+</html>

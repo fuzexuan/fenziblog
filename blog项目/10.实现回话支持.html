@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#安装会话支持模块" name="安装会话支持模块" id="安装会话支持模块" class="anchor"></a>安装会话支持模块</h1>
+<p>使用 <code>express-session</code> 和 <code>connect-mongo</code> 模块实现了将会话信息存储到<code>mongodb</code>中。 </p>
+<pre><code>npm install express-session --save
+npm install connect-mongo --save
+</code></pre>
+<h1><a href="#修改app-js" name="修改app-js" id="修改app-js" class="anchor"></a>修改app.js</h1>
+<pre><code>var settings = require('./settings');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+app.use(session({
+  secret: settings.cookieSecret,//secret 用来防止篡改 cookie
+  key: settings.db,//key 的值为 cookie 的名字
+  cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//设定 cookie 的生存期，这里我们设置 cookie 的生存期为 30 天
+  resave:true,
+  saveUninitialized:true,
+  store: new MongoStore({ //设置它的 store 参数为 MongoStore 实例，把会话信息存储到数据库中，以避免重启服务器时会话丢失
+    db: settings.db,
+    host: settings.host,
+    port: settings.port,
+  })
+}));
+</code></pre>
+<p>添加完了以后我们就可以路由中通过<code>request.session</code>来操作会话对象了. </p></div>
+  </body>
+</html>

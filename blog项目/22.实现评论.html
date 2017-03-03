@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#修改模板" name="修改模板" id="修改模板" class="anchor"></a>修改模板</h1>
+<p>views/article/detail.ejs</p>
+<pre><code>&lt;div class="panel panel-default"&gt;
+        &lt;div class="panel-heading"&gt;
+            评论列表
+        &lt;/div&gt;
+        &lt;div class="panel-body"  style="height:300px;overflow-y: scroll"&gt;
+            &lt;ul class="media-list"&gt;
+                &lt;%
+                article.comments.forEach(function(comment){
+                %&gt;
+                &lt;li class="media"&gt;
+                    &lt;div class="media-left"&gt;
+                        &lt;a href="#"&gt;
+                            &lt;img class="media-object" src="&lt;%=comment.user.avatar%&gt;" alt=""&gt;
+                        &lt;/a&gt;
+                    &lt;/div&gt;
+                    &lt;div class="media-body"&gt;
+                        &lt;p class="media-left"&gt;&lt;%- comment.content%&gt;&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;div class="media-bottom"&gt;
+                        &lt;%=comment.user.username%&gt; &lt;%=comment.createAt.toLocaleString()%&gt;
+                    &lt;/div&gt;
+                &lt;/li&gt;
+                &lt;%
+                });
+                %&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+
+    &lt;div class="panel panel-default"&gt;
+        &lt;form action="/articles/comment" method="post"&gt;
+            &lt;input type="hidden" value="&lt;%=article._id%&gt;" name="_id"/&gt;
+            &lt;div class="panel-body"&gt;
+                &lt;textarea class="form-control"   id="" cols="30" rows="10" id="content" name="content" placeholder="请输入评论" &gt;&lt;/textarea&gt;
+            &lt;/div&gt;
+            &lt;div class="panel-footer"&gt;
+                &lt;button type="submit" class="btn btn-default"&gt;提交&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+</code></pre>
+<h1><a href="#修改模型" name="修改模型" id="修改模型" class="anchor"></a>修改模型</h1>
+<p>db/models.js</p>
+<pre><code> comments: [{user:{type:ObjectId,ref:'User'},content:String,createAt:{type: Date, default: Date.now}}],
+</code></pre>
+<h1><a href="#修改路由" name="修改路由" id="修改路由" class="anchor"></a>修改路由</h1>
+<p>routes/article.js</p>
+<pre><code>router.post('/comment',middleware.checkLogin, function (req, res) {
+   var user = req.session.user;
+   Model('Article').update({_id:req.body._id},{$push:{comments:{user:user._id,content:req.body.content}}},function(err,result){
+        if(err){
+            req.flash('error',err);
+            return res.redirect('back');
+        }
+        req.flash('success', '评论成功!');
+        res.redirect('back');
+   });
+
+});
+</code></pre></div>
+  </body>
+</html>

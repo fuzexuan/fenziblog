@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#增加工具方法" name="增加工具方法" id="增加工具方法" class="anchor"></a>增加工具方法</h1>
+    <p>在<code>routes/users.js</code>中增加md5加密的工具方法</p>
+    <pre><code>function md5(val){
+        return require('crypto').createHash('md5').update(val).digest('hex');
+    }
+    </code></pre>
+    <h1><a href="#用户注册路由" name="用户注册路由" id="用户注册路由" class="anchor"></a>用户注册路由</h1>
+    <p>注册表单的form中<code>action="/users/reg"</code>,所以我们要实现用户注册的路由 修改 <code>routes/users.js</code> 中的 <code>router.post('/reg'...</code></p>
+    <pre><code>router.post('/reg', function (req, res) {
+      就是 POST 请求信息解析过后的对象，例如我们要访问 POST 来的表单内的 name="username" 域的值，只需访问 req.body['username'] 或 req.body.username 即可。
+      var user = req.body;//
+      if(user.password != user.repassword){
+        req.flash('error','两次输入的密码不一致');
+        return res.redirect('/users/reg');
+      }
+      delete user.repassword; 由于repassword不需要保存，所以可以删除
+      user.password = md5(user.password); 对密码进行md5加密
+      user.avatar = "https://secure.gravatar.com/avatar/"+md5(user.email)+"?s=48"; 得到用户的头像
+      new Model('User')(user).save(function(err,user){
+        if(err){
+          req.flash('error',err);
+          return res.redirect('/users/reg');
+        }
+        req.session.user = user;//用户信息存入 session
+        res.redirect('/');//注册成功后返回主页
+      });
+    });
+    </code></pre>
+    <h1><a href="#用户登陆路由" name="用户登陆路由" id="用户登陆路由" class="anchor"></a>用户登陆路由</h1>
+    <pre><code>router.post('/login', function (req, res) {
+        var user = req.body;
+        user.password = md5(user.password);
+        Model('User').findOne(user,function(err,user){
+            if(err){
+                req.flash('error',err);
+                return res.redirect('/users/login');
+            }
+            req.session.user = user;//用户信息存入 session
+            res.redirect('/');//注册成功后返回主页
+        });
+    });
+    </code></pre>
+    <h1><a href="#用户登出" name="用户登出" id="用户登出" class="anchor"></a>用户登出</h1>
+    <pre><code>router.get('/logout', function (req, res) {
+        req.session.user = null;//用户信息存入 session
+        res.redirect('/');//注册成功后返回主页
+    });
+    </code></pre></div>    
+  </body>
+</html>

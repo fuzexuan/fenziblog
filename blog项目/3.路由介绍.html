@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#工作原理" name="工作原理" id="工作原理" class="anchor"></a>工作原理</h1>
+    <p>routes/index.js 中有以下代码：</p>
+    <pre><code>var express = require('express');
+    var router = express.Router();
+
+    /* GET home page. */
+    router.get('/', function(req, res, next) {
+      res.render('index', { title: 'Express' });
+    });
+
+    module.exports = router;
+    </code></pre>
+    <p>这段代码的意思是当访问主页时，调用 ejs 模板引擎，来渲染 index.ejs 模版文件（即将 title 变量全部替换为字符串 Express），生成静态页面并显示在浏览器中。</p>
+    <h1><a href="#路由配置" name="路由配置" id="路由配置" class="anchor"></a>路由配置</h1>
+    <p>express 封装了多种 http 请求方式，主要只使用 get 和 post 两种，即 app.get() 和 app.post() 。 app.get() 和 app.post() 的第一个参数都为请求的路径，第二个参数为处理请求的回调函数，回调函数有两个参数分别是 req 和 res，代表请求信息和响应信息 。路径请求及对应的获取路径有以下几种形式：</p>
+    <h2><a href="#req-query-处理-get-请求-获取查询字符串-" name="req-query-处理-get-请求-获取查询字符串-" id="req-query-处理-get-请求-获取查询字符串-" class="anchor"></a>req.query(处理 get 请求，获取查询字符串)</h2>
+    <pre><code>GET /index.html?name=zfpx
+    req.query.name  -&gt; zfpx
+    </code></pre>
+    <h2><a href="#req-params-处理-name-形式的-get-或-post-请求-获取请求参数-" name="req-params-处理-name-形式的-get-或-post-请求-获取请求参数-" id="req-params-处理-name-形式的-get-或-post-请求-获取请求参数-" class="anchor"></a>req.params(处理 /:name 形式的 get 或 post 请求，获取请求参数)</h2>
+    <pre><code>// GET /user/zfpx
+    req.params.name -&gt; zfpx
+    </code></pre>
+    <h2><a href="#req-body-处理-post-请求-获取-post-请求体-" name="req-body-处理-post-请求-获取-post-请求体-" id="req-body-处理-post-请求-获取-post-请求体-" class="anchor"></a>req.body(处理 post 请求，获取 post 请求体)</h2>
+    <pre><code>req.body.name
+    </code></pre></div>    
+  </body>
+</html>

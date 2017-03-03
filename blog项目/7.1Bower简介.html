@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#bower是什么" name="bower是什么" id="bower是什么" class="anchor"></a>Bower是什么</h1>
+<p>Bower是一个客户端技术的软件包管理器，它可用于搜索、安装和卸载如JavaScript、HTML、CSS之类的网络资源。</p>
+<h1><a href="#bower的优点" name="bower的优点" id="bower的优点" class="anchor"></a>Bower的优点</h1>
+<ol>
+  <li>节省时间。为什么要学习Bower的第一个原因，就是它会为你节省寻找客户端的依赖关系的时间。每次我需要安装jQuery的时候，我都需要去jQuery网站下载包或使用CDN版本。但是有了Bower，你只需要输入一个命令，jquery就会安装在本地计算机上，你不需要去记版本号之类的东西，你也可以通过Bower的info命令去查看任意库的信息。</li>
+  <li>脱机工作。Bower会在用户主目录下创建一个.bower的文件夹，这个文件夹会下载所有的资源、并安装一个软件包使它们可以离线使用。如果你熟悉Java，Bower即是一个类似于现在流行的Maven构建系统的.m2仓库。每次你下载任何资源库都将被安装在两个文件夹中 —— 一个在的应用程序文件夹，另一个在用户主目录下的.bower文件夹。因此，下一次你需要这个仓库时，就会用那个用户主目录下.bower中的版本。 可以很容易地展现客户端的依赖关系。你可以创建一个名为bower.json的文件，在这个文件里你可以指定所有客户端的依赖关系，任何时候你需要弄清楚你正在使用哪些库，你可以参考这个文件。</li>
+  <li>让升级变得简单。假设某个库的新版本发布了一个重要的安全修补程序，为了安装新版本，你只需要运行一个命令，bower会自动更新所有有关新版本的依赖关系。</li>
+</ol>
+<h1><a href="#前提准备" name="前提准备" id="前提准备" class="anchor"></a>前提准备</h1>
+<p>为了安装bower，你首先需要安装如下文件：</p>
+<ul>
+  <li>Node：下载最新版本的node.js</li>
+  <li>NPM：NPM是node程序包管理器。它是捆绑在nodejs的安装程序上的，所以一旦你已经安装了node，NPM也就安装好了。</li>
+  <li>Git：你需要从git仓库获取一些代码包。</li>
+</ul>
+<h1><a href="#安装bower" name="安装bower" id="安装bower" class="anchor"></a>安装Bower</h1>
+<p>一旦你已经安装了上面所说的所有必要文件，键入以下命令安装Bower：</p>
+<pre><code>$ npm install -g bower
+</code></pre></div>
+  </body>
+</html>

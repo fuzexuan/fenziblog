@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="lesson-content-text-body"><h1><a href="#在导航栏增加搜索框" name="在导航栏增加搜索框" id="在导航栏增加搜索框" class="anchor"></a>在导航栏增加搜索框</h1>
+    <p>views/include/header.ejs</p>
+    <pre><code>&lt;form  class="navbar-form navbar-right" role="search" method="get" action="/articles/list/1/2"&gt;
+                &lt;div class="form-group"&gt;
+                    &lt;label for="keyword"&gt;关键字&lt;/label&gt;
+                    &lt;input type="text" name="keyword" id="keyword" class="form-control" value="&lt;%=keyword%&gt;"/&gt;
+                &lt;/div&gt;
+                &lt;button type="submit" class="btn  btn-default" value="search" name="searchBtn"&gt;搜索&lt;/button&gt;
+            &lt;/form&gt;
+    </code></pre>
+    <h1><a href="#在首页增加分页条" name="在首页增加分页条" id="在首页增加分页条" class="anchor"></a>在首页增加分页条</h1>
+    <p>views/index.ejs</p>
+    <pre><code> &lt;ul class="pagination"&gt;
+      &lt;%
+      for(var i=1;i&lt;=totalPage;i++){
+      %&gt;
+      &lt;li&gt;&lt;a href="/articles/list/&lt;%=i%&gt;/&lt;%=pageSize%&gt;?keyword=&lt;%=keyword%&gt;"&gt;&lt;%=i%&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;%
+      }
+      %&gt;
+     &lt;/ul&gt;
+    </code></pre>
+    <h1><a href="#首页导航重定向到文章列表页" name="首页导航重定向到文章列表页" id="首页导航重定向到文章列表页" class="anchor"></a>首页导航重定向到文章列表页</h1>
+    <p>routes/index.js</p>
+    <pre><code>router.get('/', function(req, res, next) {
+      res.redirect('/articles/list/1/2');
+    });
+    </code></pre>
+    <h1><a href="#增加文章列表导航" name="增加文章列表导航" id="增加文章列表导航" class="anchor"></a>增加文章列表导航</h1>
+    <p>routes/article.js</p>
+    <pre><code>router.get('/list/:pageNum/:pageSize',function(req, res, next) {
+        var pageNum = req.params.pageNum&amp;&amp;req.params.pageNum&gt;0?parseInt(req.params.pageNum):1;
+        var pageSize =req.params.pageSize&amp;&amp;req.params.pageSize&gt;0?parseInt(req.params.pageSize):2;
+        var query = {};
+        var searchBtn = req.query.searchBtn;
+        var keyword = req.query.keyword;
+        if(searchBtn){
+            req.session.keyword = keyword;
+        }
+        if(req.session.keyword){
+            query['title'] = new RegExp(req.session.keyword,"i");
+        }
+
+        Model('Article').count(query,function(err,count){
+            Model('Article').find(query).sort({createAt:-1}).skip((pageNum-1)*pageSize).limit(pageSize).populate('user').exec(function(err,articles){
+                articles.forEach(function (article) {
+                    article.content = markdown.toHTML(article.content);
+                });
+                res.render('index',{
+                    title:'主页',
+                    pageNum:pageNum,
+                    pageSize:pageSize,
+                    keyword:req.session.keyword,
+                    totalPage:Math.ceil(count/pageSize),
+                    articles:articles
+                });
+            });
+        });
+    });
+    </code></pre></div>    
+  </body>
+</html>

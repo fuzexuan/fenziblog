@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <div class="lesson-content-text-body"><h1><a href="#初始化bower" name="初始化bower" id="初始化bower" class="anchor"></a>初始化bower</h1>
+    <p>先执行此命令，然后会执行一系列交互问答  bower init</p>
+    <pre><code>E:\zkingblog&gt;bower init
+    ? name: zkingblog
+    ? version: 0.0.0
+    ? description:
+    ? main file:
+    ? what types of modules does this package expose?
+    ? keywords:
+    ? authors: zhangrenyang-t510 &lt;zhang_renyang@&gt;
+    ? license: MIT
+    ? homepage:
+    ? set currently installed components as dependencies? Yes
+    ? add commonly ignored files to ignore list? Yes
+    ? would you like to mark this package as private which prevents it from being accidentally published to the regis
+    ? would you like to mark this package as private which prevents it from being accidentally published to the regis
+
+    {
+      name: 'zkingblog',
+      version: '0.0.0',
+      authors: [
+        'zhangrenyang-t510 &lt;zhang_siqi@&gt;'
+      ],
+      license: 'MIT',
+      ignore: [
+        '**/.*',
+        'node_modules',
+        'bower_components',
+        'test',
+        'tests'
+      ]
+    }
+
+    ? Looks good? Yes
+    </code></pre>
+    <p>执行完此命令后会生成一个 <code>bower.json</code> 文件。</p>
+    <h1><a href="#创建配置文件" name="创建配置文件" id="创建配置文件" class="anchor"></a>创建配置文件 <code>.bowerrc</code></h1>
+    <p>里面内容如下 </p>
+    <pre><code>{"directory":"./public/lib"}
+    </code></pre>
+    <p>这表示以后bower安装的模块都安装在<code>./public/lib</code>下面。</p>
+    <h1><a href="#安装bootstrap" name="安装bootstrap" id="安装bootstrap" class="anchor"></a>安装bootstrap</h1>
+    <pre><code>bower install bootstrap --save
+    </code></pre>
+    <p>大家可以看到，不但安装了bootstrap,也安装了依赖的jquery</p>
+    <pre><code>E:\zkingblog&gt;bower install bootstrap --save
+    bower bootstrap#*               cached git://github.com/twbs/bootstrap.git#3.3.5
+    bower bootstrap#*             validate 3.3.5 against git://github.com/twbs/bootstrap.git#*
+    bower jquery#&gt;= 1.9.1           cached git://github.com/jquery/jquery.git#2.1.4
+    bower jquery#&gt;= 1.9.1         validate 2.1.4 against git://github.com/jquery/jquery.git#&gt;= 1.9.1
+    bower bootstrap#~3.3.5         install bootstrap#3.3.5
+    bower jquery#&gt;= 1.9.1          install jquery#2.1.4
+
+    bootstrap#3.3.5 public\lib\bootstrap
+    └── jquery#2.1.4
+
+    jquery#2.1.4 public\lib\jquery
+    </code></pre></div>
+
+  </body>
+</html>
